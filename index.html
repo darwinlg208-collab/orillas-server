@@ -877,6 +877,7 @@ const habPrecios = {
   '1': [45,85,35,70,20,20],
 };
 function calcPrecios() {
+  if (!document.getElementById('sel-hab')) return;
   const hab    = document.getElementById('sel-hab').value;
   const noches = parseInt(document.getElementById('sel-noches').value)||0;
   const desay  = parseInt(document.getElementById('sel-desayunos').value)||0;
@@ -922,9 +923,11 @@ function calcPrecios() {
   } else { boxTot.style.display='none'; }
 }
 ['sel-hab','sel-noches','sel-desayunos','sel-menus','sel-tipo'].forEach(function(id){
-  document.getElementById(id).addEventListener('change',calcPrecios);
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('change', calcPrecios);
 });
-document.getElementById('sel-personas').addEventListener('input',calcPrecios);
+var selPersonas = document.getElementById('sel-personas');
+if (selPersonas) selPersonas.addEventListener('input', calcPrecios);
 
 
   // ── CONFIG API ─────────────────────────────────────────────────────────────
