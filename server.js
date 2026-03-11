@@ -208,7 +208,7 @@ var server = http.createServer(function(req, res) {
   res.writeHead(404); res.end('Not found');
 });
 
-server.listen(PORT, function() {
+server.listen(PORT, '0.0.0.0', function() {
   console.log('\n╔══════════════════════════════════════════════╗');
   console.log('║   Club Orillas de Alocén — Servidor local    ║');
   console.log('╠══════════════════════════════════════════════╣');
