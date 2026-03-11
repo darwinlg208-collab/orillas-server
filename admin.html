@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover,user-scalable=no"/>
+<title>Admin · Club Orillas de Alocén</title>
+<style>
+:root{--g:#1a6b4a;--g2:#14573c;--g3:#e8f5f0;--sand:#c8a05a;--dark:#0c1a14;--red:#c0392b;--or:#e67e22;--gray:#f4f6f5;--bd:#dde8e4}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--gray);color:#1a2e25;min-height:100vh}
+/* LOGIN */
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--dark)}
+.lbox{background:#fff;padding:3rem;width:340px;border-top:4px solid var(--sand)}
+.lbox-logo{text-align:center;margin-bottom:1.8rem}
+.lbox-t{font-size:1.25rem;font-weight:700;color:var(--g);margin-top:.5rem}
+.lbox-s{font-size:.72rem;color:#6b9080;text-transform:uppercase;letter-spacing:.15em}
+.lf{display:flex;flex-direction:column;gap:.35rem;margin-bottom:1rem}
+.lf label{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#6b9080}
+.lf input{padding:.8rem 1rem;border:1px solid var(--bd);font-size:.9rem;outline:none}
+.lf input:focus{border-color:var(--g)}
+.lbtn{width:100%;padding:.9rem;background:var(--g);color:#fff;border:none;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;cursor:pointer;margin-top:.3rem}
+.lbtn:hover{background:var(--g2)}
+.lerr{color:var(--red);font-size:.8rem;text-align:center;margin-top:.7rem;min-height:1rem}
+/* APP */
+#app{display:none}
+header{background:var(--g);color:#fff;padding:.9rem 2rem;display:flex;justify-content:space-between;align-items:center}
+.ht{font-size:.95rem;font-weight:700}.hs{font-size:.68rem;opacity:.7;text-transform:uppercase;letter-spacing:.1em}
+.hright{display:flex;align-items:center;gap:1rem}
+.live{font-size:.72rem;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:.4rem}
+.dot{width:7px;height:7px;border-radius:50%;background:#4dff9a}
+.logout{background:rgba(255,255,255,.15);border:none;color:#fff;padding:.38rem .85rem;font-size:.73rem;cursor:pointer;text-transform:uppercase;letter-spacing:.08em}
+.logout:hover{background:rgba(255,255,255,.25)}
+.tabs{background:#fff;border-bottom:1px solid var(--bd);padding:0 2rem;display:flex}
+.tab{padding:.9rem 1.3rem;border:none;background:none;font-size:.83rem;font-weight:500;color:#6b9080;cursor:pointer;border-bottom:3px solid transparent;display:flex;align-items:center;gap:.4rem}
+.tab.active{color:var(--g);border-bottom-color:var(--g)}
+.tbadge{background:var(--red);color:#fff;border-radius:10px;padding:.1rem .45rem;font-size:.63rem;font-weight:700}
+main{padding:1.8rem;max-width:1200px;margin:0 auto}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.8rem}
+.stat{background:#fff;padding:1.4rem;border-left:4px solid var(--g)}
+.sv{font-size:2rem;font-weight:700;color:var(--g);line-height:1}
+.sl{font-size:.7rem;color:#6b9080;text-transform:uppercase;letter-spacing:.1em;margin-top:.35rem}
+.sec-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.3rem}
+.sec-head h2{font-size:1.05rem;font-weight:700}
+.btnadd{background:var(--g);color:#fff;border:none;padding:.65rem 1.3rem;font-size:.78rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.35rem}
+.btnadd:hover{background:var(--g2)}
+/* CURSOS */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.cc{background:#fff;padding:1.4rem;border:1px solid var(--bd);border-top:3px solid var(--g)}
+.cn{font-size:.95rem;font-weight:700;margin-bottom:.25rem}
+.ci{font-size:.76rem;color:#6b9080;margin-bottom:.45rem}
+.ch{font-size:.76rem;margin-bottom:.7rem}
+.cps{display:flex;gap:.45rem;margin-bottom:.7rem;flex-wrap:wrap}
+.pt{font-size:.67rem;padding:.18rem .5rem}
+.pt.ns{background:#fef9f0;color:var(--sand);border:1px solid #f0ddb0}
+.pt.s{background:var(--g3);color:var(--g);border:1px solid #b8d8c8}
+.bw{background:var(--gray);height:5px;border-radius:3px;margin:.5rem 0}
+.b{height:5px;border-radius:3px;background:var(--g);transition:width .4s}
+.b.warn{background:var(--or)}.b.full{background:var(--red)}
+.cq{font-size:.7rem;color:#6b9080;display:flex;justify-content:space-between;margin-bottom:.9rem}
+.cact{display:flex;gap:.45rem}
+.bedit{flex:1;padding:.48rem;background:var(--g3);color:var(--g);border:1px solid var(--bd);font-size:.73rem;cursor:pointer;font-weight:600}
+.bedit:hover{background:var(--g);color:#fff}
+.bdel{padding:.48rem .65rem;background:#fdf0f0;color:var(--red);border:1px solid #f5c6c6;font-size:.73rem;cursor:pointer}
+.bdel:hover{background:var(--red);color:#fff}
+/* FILTROS */
+.frow{display:flex;gap:.6rem;margin-bottom:1.1rem;flex-wrap:wrap;align-items:center}
+.fb{padding:.38rem .85rem;border:1px solid var(--bd);background:#fff;font-size:.76rem;cursor:pointer}
+.fb.active,.fb:hover{background:var(--g);color:#fff;border-color:var(--g)}
+.srch{flex:1;min-width:160px;padding:.38rem .85rem;border:1px solid var(--bd);font-size:.8rem;outline:none}
+.srch:focus{border-color:var(--g)}
+/* TABLA */
+.tw{background:#fff;border:1px solid var(--bd);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.8rem}
+thead th{background:var(--g);color:#fff;padding:.72rem 1rem;text-align:left;font-weight:600;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--bd)}
+tbody tr:hover{background:var(--g3)}
+tbody td{padding:.8rem 1rem;vertical-align:middle}
+.badge{display:inline-block;padding:.15rem .5rem;font-size:.63rem;font-weight:700;text-transform:uppercase}
+.badge.pend{background:#fff8e6;color:#b7860c;border:1px solid #f0d888}
+.badge.conf{background:#e8f5f0;color:var(--g);border:1px solid #b0d8c8}
+.badge.canc{background:#fdf0f0;color:var(--red);border:1px solid #f5c6c6}
+.tact{display:flex;gap:.3rem}
+.bs{padding:.26rem .52rem;font-size:.68rem;cursor:pointer;border:none;font-weight:600}
+.bs.c{background:var(--g3);color:var(--g)}.bs.c:hover{background:var(--g);color:#fff}
+.bs.x{background:#fdf0f0;color:var(--red)}.bs.x:hover{background:var(--red);color:#fff}
+.bs.d{background:#fdf0f0;color:var(--red)}.bs.d:hover{background:var(--red);color:#fff}
+.empty{text-align:center;padding:3rem;color:#6b9080}
+/* MODAL */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.mbg.open{display:flex}
+.modal{background:#fff;width:460px;max-width:95vw}
+.mh{background:var(--g);color:#fff;padding:1.05rem 1.35rem;display:flex;justify-content:space-between;align-items:center}
+.mh h3{font-size:.92rem;font-weight:700}
+.mclose{background:none;border:none;color:#fff;font-size:1.35rem;cursor:pointer}
+.mb{padding:1.35rem}
+.mfg{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.85rem}
+.mfg label{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:#6b9080;font-weight:600}
+.mfg input,.mfg select{padding:.62rem .82rem;border:1px solid var(--bd);font-size:.85rem;outline:none;font-family:inherit}
+.mfg input:focus,.mfg select:focus{border-color:var(--g)}
+.mrow{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.mfoot{display:flex;justify-content:flex-end;gap:.65rem;padding:.85rem 1.35rem;border-top:1px solid var(--bd);background:var(--gray)}
+.bcm{padding:.58rem 1.15rem;background:var(--gray);border:1px solid var(--bd);font-size:.78rem;cursor:pointer}
+.bsave{padding:.58rem 1.15rem;background:var(--g);color:#fff;border:none;font-size:.78rem;font-weight:600;cursor:pointer}
+.bsave:hover{background:var(--g2)}
+/* TOAST */
+.toast{position:fixed;bottom:1.8rem;right:1.8rem;background:var(--g);color:#fff;padding:.85rem 1.35rem;font-size:.83rem;font-weight:500;transform:translateY(80px);opacity:0;transition:all .35s;z-index:2000}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.err{background:var(--red)}
+/* NUEVO badge */
+.new-badge{display:inline-block;background:var(--red);color:#fff;font-size:.6rem;padding:.1rem .4rem;font-weight:700;margin-left:.4rem;vertical-align:middle;animation:blink .8s ease 5}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+</style>
+
+  <script src="capacitor.js" onerror="console.log('Web mode')"></script>
+  <style>
+    @supports(padding-top: env(safe-area-inset-top)) {
+      header { padding-top: calc(.9rem + env(safe-area-inset-top)) !important; }
+    }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    input, select { font-size: 16px !important; }
+  </style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lbox">
+    <div class="lbox-logo">
+      <div style="font-size:2.5rem">⚓</div>
+      <div class="lbox-t">Club Orillas de Alocén</div>
+      <div class="lbox-s">Panel de Administración</div>
+    </div>
+    <h2 style="font-size:.95rem;font-weight:600;text-align:center;margin-bottom:1.3rem">Acceso restringido</h2>
+    <div class="lf">
+      <label>Contraseña</label>
+      <input type="password" id="pwd" placeholder="Contraseña…"/>
+    </div>
+    <button class="lbtn" onclick="doLogin()">Entrar</button>
+    <div class="lerr" id="lerr"></div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <div style="display:flex;align-items:center;gap:.8rem">
+      <span style="font-size:1.4rem">⚓</span>
+      <div><div class="ht">Club Orillas de Alocén</div><div class="hs">Panel Admin</div></div>
+    </div>
+    <div class="hright">
+      <span class="live"><span class="dot"></span>En vivo</span>
+      <button class="logout" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('cursos',this)">
+      📚 Cursos <span class="tbadge" id="tb-c">0</span>
+    </button>
+    <button class="tab" onclick="switchTab('reservas',this)">
+      📋 Reservas <span class="tbadge" id="tb-r">0</span>
+    </button>
+  </div>
+
+  <main>
+    <div class="stats">
+      <div class="stat"><div class="sv" id="st-c">0</div><div class="sl">Cursos activos</div></div>
+      <div class="stat"><div class="sv" id="st-r">0</div><div class="sl">Total reservas</div></div>
+      <div class="stat"><div class="sv" id="st-p">0</div><div class="sl">Pendientes</div></div>
+      <div class="stat"><div class="sv" id="st-cf">0</div><div class="sl">Confirmadas</div></div>
+    </div>
+
+    <div id="pane-cursos">
+      <div class="sec-head">
+        <h2>Cursos y actividades</h2>
+        <button class="btnadd" onclick="openModal()">+ Nuevo curso</button>
+      </div>
+      <div class="cgrid" id="cgrid"></div>
+    </div>
+
+    <div id="pane-reservas" style="display:none">
+      <div class="sec-head">
+        <h2>Reservas recibidas</h2>
+        <span id="lupd" style="font-size:.72rem;color:#6b9080"></span>
+      </div>
+      <div class="frow">
+        <button class="fb active" onclick="setF('all',this)">Todas</button>
+        <button class="fb" onclick="setF('pendiente',this)">Pendientes</button>
+        <button class="fb" onclick="setF('confirmada',this)">Confirmadas</button>
+        <button class="fb" onclick="setF('cancelada',this)">Canceladas</button>
+        <input class="srch" id="srch" placeholder="Buscar…" oninput="renderR()"/>
+      </div>
+      <div class="tw">
+        <table>
+          <thead><tr>
+            <th>#</th><th>Nombre</th><th>Email</th><th>Teléfono</th>
+            <th>Actividad</th><th>Mensaje</th><th>Estado</th><th>Fecha</th><th>Acciones</th>
+          </tr></thead>
+          <tbody id="rbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="mbg" id="modal">
+  <div class="modal">
+    <div class="mh">
+      <h3 id="mtit">Nuevo curso</h3>
+      <button class="mclose" onclick="closeModal()">×</button>
+    </div>
+    <div class="mb">
+      <input type="hidden" id="cid"/>
+      <div class="mfg"><label>Nombre del curso</label><input id="cnombre" placeholder="Ej: Curso de Windsurf"/></div>
+      <div class="mfg"><label>Instructor</label><input id="cinst" placeholder="Nombre del instructor"/></div>
+      <div class="mfg"><label>Horario</label><input id="chora" placeholder="Ej: Sábados 10:00–13:00"/></div>
+      <div class="mrow">
+        <div class="mfg"><label>Cupos totales</label><input id="ccupos" type="number" min="1" placeholder="10"/></div>
+        <div class="mfg"><label>Precio no socio (€)</label><input id="cpns" type="number" min="0" placeholder="90"/></div>
+      </div>
+      <div class="mfg"><label>Precio socio (€)</label><input id="cps" type="number" min="0" placeholder="80"/></div>
+    </div>
+    <div class="mfoot">
+      <button class="bcm" onclick="closeModal()">Cancelar</button>
+      <button class="bsave" onclick="saveCurso()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const API = isLocal ? '' : (window.__API_URL__ || 'http://TU-SERVIDOR.railway.app');
+  // Ruta relativa — funciona con node server.js
+let cursos = [], reservas = [], fil = 'all', prevCount = -1;
+
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const pwd = document.getElementById('pwd').value;
+  try {
+    const r = await fetch(API+'/api/login', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pwd})});
+    const d = await r.json();
+    if (d.ok) {
+      sessionStorage.setItem('ok','1');
+      document.getElementById('login').style.display='none';
+      document.getElementById('app').style.display='block';
+      init();
+    } else {
+      document.getElementById('lerr').textContent='❌ Contraseña incorrecta';
+    }
+  } catch(e) {
+    document.getElementById('lerr').textContent='⚠ No conecta. ¿Está node server.js corriendo?';
+  }
+}
+document.getElementById('pwd').onkeydown = e => { if(e.key==='Enter') doLogin(); };
+
+function doLogout() { sessionStorage.removeItem('ok'); location.reload(); }
+
+if (sessionStorage.getItem('ok')) {
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+}
+
+// ── INIT + POLLING ────────────────────────────────────────────────────────────
+function init() {
+  loadAll();
+  setInterval(loadAll, 4000); // refresco cada 4 segundos
+}
+if (sessionStorage.getItem('ok')) init();
+
+async function loadAll() {
+  try {
+    const [rc, rr] = await Promise.all([
+      fetch(API+'/api/cursos').then(r=>r.json()),
+      fetch(API+'/api/reservas').then(r=>r.json())
+    ]);
+    cursos = rc;
+    // Detectar nueva reserva
+    if (prevCount >= 0 && rr.length > prevCount) {
+      const nueva = rr[rr.length-1];
+      showToast('🔔 Nueva reserva de ' + nueva.nombre + '!');
+    }
+    prevCount = rr.length;
+    reservas = rr;
+    renderAll();
+  } catch(e) { /* servidor no responde */ }
+}
+
+function renderAll() {
+  renderCursos();
+  renderR();
+  // Stats
+  const pend = reservas.filter(r=>r.estado==='pendiente').length;
+  const conf = reservas.filter(r=>r.estado==='confirmada').length;
+  document.getElementById('st-c').textContent  = cursos.length;
+  document.getElementById('st-r').textContent  = reservas.length;
+  document.getElementById('st-p').textContent  = pend;
+  document.getElementById('st-cf').textContent = conf;
+  document.getElementById('tb-c').textContent  = cursos.length;
+  document.getElementById('tb-r').textContent  = pend || reservas.length;
+  document.getElementById('lupd').textContent  = 'Actualizado: ' + new Date().toLocaleTimeString('es-ES');
+}
+
+// ── CURSOS ────────────────────────────────────────────────────────────────────
+function renderCursos() {
+  const g = document.getElementById('cgrid');
+  if (!cursos.length) { g.innerHTML='<p class="empty">Sin cursos. Crea el primero.</p>'; return; }
+  g.innerHTML = cursos.map(c => {
+    const pct = c.cupos>0 ? Math.round(c.inscritos/c.cupos*100) : 0;
+    const bc  = pct>=100?'full':pct>=75?'warn':'';
+    return `<div class="cc">
+      <div class="cn">${esc(c.nombre)}</div>
+      ${c.instructor?`<div class="ci">👤 ${esc(c.instructor)}</div>`:''}
+      <div class="ch">📅 ${esc(c.horario||'Sin horario')}</div>
+      <div class="cps"><span class="pt ns">No socio: ${c.precio_nosocio}€</span><span class="pt s">Socio: ${c.precio_socio}€</span></div>
+      <div class="cq"><span>${c.inscritos} de ${c.cupos} cupos</span><span>${pct}%</span></div>
+      <div class="bw"><div class="b ${bc}" style="width:${Math.min(pct,100)}%"></div></div>
+      <div class="cact">
+        <button class="bedit" onclick='openModal(${JSON.stringify(c)})'>✏️ Editar</button>
+        <button class="bdel" onclick="delCurso(${c.id})">🗑️</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openModal(c) {
+  document.getElementById('mtit').textContent = c?'Editar curso':'Nuevo curso';
+  document.getElementById('cid').value     = c?.id||'';
+  document.getElementById('cnombre').value = c?.nombre||'';
+  document.getElementById('cinst').value   = c?.instructor||'';
+  document.getElementById('chora').value   = c?.horario||'';
+  document.getElementById('ccupos').value  = c?.cupos||10;
+  document.getElementById('cpns').value    = c?.precio_nosocio||90;
+  document.getElementById('cps').value     = c?.precio_socio||80;
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').onclick = e => { if(e.target.id==='modal') closeModal(); };
+
+async function saveCurso() {
+  const id     = document.getElementById('cid').value;
+  const nombre = document.getElementById('cnombre').value.trim();
+  if (!nombre) { showToast('El nombre es obligatorio','err'); return; }
+  const body = {nombre, instructor:document.getElementById('cinst').value.trim(), horario:document.getElementById('chora').value.trim(), cupos:parseInt(document.getElementById('ccupos').value)||10, precio_nosocio:parseInt(document.getElementById('cpns').value)||90, precio_socio:parseInt(document.getElementById('cps').value)||80};
+  const url  = id ? `/api/cursos/${id}` : '/api/cursos';
+  const meth = id ? 'PUT' : 'POST';
+  await fetch(API+url,{method:meth,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  closeModal();
+  showToast(id?'✅ Curso actualizado':'✅ Curso creado');
+  loadAll();
+}
+
+async function delCurso(id) {
+  if (!confirm('¿Eliminar este curso?')) return;
+  await fetch(API+`/api/cursos/${id}`,{method:'DELETE'});
+  showToast('Curso eliminado');
+  loadAll();
+}
+
+// ── RESERVAS ──────────────────────────────────────────────────────────────────
+function renderR() {
+  const q    = (document.getElementById('srch')?.value||'').toLowerCase();
+  const list = [...reservas].filter(r => {
+    const mf = fil==='all'||r.estado===fil;
+    const mq = !q||r.nombre.toLowerCase().includes(q)||r.email.toLowerCase().includes(q)||(r.actividad||'').toLowerCase().includes(q);
+    return mf && mq;
+  }).reverse();
+
+  const tb = document.getElementById('rbody');
+  if (!list.length) { tb.innerHTML=`<tr><td colspan="9" class="empty">No hay reservas que coincidan.</td></tr>`; return; }
+
+  tb.innerHTML = list.map((r,i) => {
+    const bc   = r.estado==='pendiente'?'pend':r.estado==='confirmada'?'conf':'canc';
+    const fecha = new Date(r.fecha).toLocaleString('es-ES',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const isNew = (Date.now() - r.id) < 30000; // menos de 30s
+    return `<tr>
+      <td style="color:#999;font-size:.7rem">${list.length-i}</td>
+      <td><strong>${esc(r.nombre)}</strong>${isNew?'<span class="new-badge">NUEVO</span>':''}</td>
+      <td><a href="mailto:${esc(r.email)}" style="color:var(--g)">${esc(r.email)}</a></td>
+      <td>${esc(r.telefono||'—')}</td>
+      <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${esc(r.actividad)}">${esc(r.actividad)}</td>
+      <td style="max-width:150px;font-size:.75rem;color:#555;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc((r.mensaje||'—').substring(0,40))}${(r.mensaje||'').length>40?'…':''}</td>
+      <td><span class="badge ${bc}">${r.estado}</span></td>
+      <td style="font-size:.7rem;color:#999;white-space:nowrap">${fecha}</td>
+      <td><div class="tact">
+        ${r.estado!=='confirmada'?`<button class="bs c" onclick="cambiar(${r.id},'confirmada')">✓</button>`:''}
+        ${r.estado!=='cancelada'?`<button class="bs x" onclick="cambiar(${r.id},'cancelada')">✗</button>`:''}
+        <button class="bs d" onclick="delR(${r.id})">🗑</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+async function cambiar(id, estado) {
+  await fetch(API+`/api/reservas/${id}/estado`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({estado})});
+  showToast(estado==='confirmada'?'✅ Confirmada':'❌ Cancelada');
+  loadAll();
+}
+
+async function delR(id) {
+  if (!confirm('¿Eliminar?')) return;
+  await fetch(API+`/api/reservas/${id}`,{method:'DELETE'});
+  showToast('Eliminada');
+  loadAll();
+}
+
+function setF(f,btn) {
+  fil=f;
+  document.querySelectorAll('.fb').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderR();
+}
+
+function switchTab(t,btn) {
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-cursos').style.display   = t==='cursos'?'block':'none';
+  document.getElementById('pane-reservas').style.display = t==='reservas'?'block':'none';
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+let toastT;
+function showToast(msg,type){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show'+(type==='err'?' err':'');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.className='toast',3200);
+}
+</script>
+</body>
+</html>
