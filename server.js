@@ -208,12 +208,17 @@ var server = http.createServer(function(req, res) {
   res.writeHead(404); res.end('Not found');
 });
 
-server.listen(PORT, function() {
+server.listen(PORT, () => {
+  const displayPort = PORT;
+  // Si estamos en Railway, no solemos usar localhost en el link visual
+  const host = process.env.RAILWAY_STATIC_URL ? `https://${process.env.RAILWAY_STATIC_URL}` : `http://localhost:${displayPort}`;
+
   console.log('\n╔══════════════════════════════════════════════╗');
-  console.log('║   Club Orillas de Alocén — Servidor local    ║');
+  console.log('║    Club Orillas de Alocén — Servidor         ║');
   console.log('╠══════════════════════════════════════════════╣');
-  console.log('║  🌊 Web pública:  http://localhost:3000/      ║');
-  console.log('║  🔐 Panel admin:  http://localhost:3000/admin ║');
-  console.log('║     Contraseña:   2008                        ║');
+  console.log(`║  🌊 Puerto Activo:  ${displayPort}                     ║`);
+  console.log(`║  🔗 URL: ${host.padEnd(35)} ║`);
+  console.log('║  🔐 Panel admin:  /admin                     ║');
+  console.log('║      Contraseña:  2008                       ║');
   console.log('╚══════════════════════════════════════════════╝\n');
 });
