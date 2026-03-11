@@ -1,9 +1,0 @@
-{
-  "name": "orillas-club",
-  "version": "1.0.0",
-  "description": "Servidor Club Orillas de Alocén",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  }
-}
